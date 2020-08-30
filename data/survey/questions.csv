@@ -1,0 +1,7 @@
+﻿id,survey_id,step_no,question_en,question_ar,required
+1,1,1,"Based on your recent visit to Al Rajhi Bank's branch, how likely are you to recommend Al Rajhi Bank banking experience to a friend, relative or colleague?","بناءً على زيارتك الأخيرة لفرع مصرف الراجحي، ما احتمالية أن توصي أحد أصدقائك أو أقاربك أو زملائك بتجربتك مع الخدمات المصرفية التي يقدمها مصرف الراجحي وفقًا لمقياس النقاط من صفر-10؟  الرجاء الإجابة على السؤال باستخدام المقياس التالي",TRUE
+2,1,1, Please specify the reason behind rating Al Rajhi Bank this score,يرجى ذكر السبب الذي جعلك تختار هذا التقييم من القائمة أدناه,TRUE
+3,1,2,To what extent would you say you are satisfied or dissatisfied about your recent visit? ,الى أي مدى تقول انك راضي او غير راضي عن زيارتك االاخيره للفرع؟,TRUE
+4,1,3, How much effort did you personally have to put to execute your banking transaction through your visit,كيف تقيم مقدار الجهد الذي بذلته لتقديم طلبك او تنفيذ عملية مصرفية خلال الزيارة؟,TRUE
+5,1,4,Do you got the requested service from the first visit?,هل تمت خدمتك بالشكل المطلوب من أول زياره لك للفرع؟,TRUE
+6,1,1,"Thank you, Please follow us on","شكرا لك ، يرجى متابعتنا",FALSE
