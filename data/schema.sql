@@ -1,15 +1,15 @@
 drop table user_roles;
 drop table roles;
 drop table users;
-drop table answers;
-drop table questions;
+drop table survey_answers;
+drop table survey_questions;
 drop table surveys;
 
 delete from user_roles;
 delete from roles;
 delete from users;
-delete from answers;
-delete from questions;
+delete from survey_answers;
+delete from survey_questions;
 delete from surveys;
 
 
