@@ -1,4 +1,4 @@
-package com.visiblestarsksa.survey.security.services;
+package com.visiblestarsksa.survey.security.service;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.visiblestarsksa.survey.models.User;

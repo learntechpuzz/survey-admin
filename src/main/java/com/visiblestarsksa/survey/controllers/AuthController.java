@@ -10,7 +10,7 @@ import com.visiblestarsksa.survey.payload.response.MessageResponse;
 import com.visiblestarsksa.survey.repository.RoleRepository;
 import com.visiblestarsksa.survey.repository.UserRepository;
 import com.visiblestarsksa.survey.security.jwt.JwtUtils;
-import com.visiblestarsksa.survey.security.services.UserDetailsImpl;
+import com.visiblestarsksa.survey.security.service.UserDetailsImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -105,7 +105,7 @@ public class AuthController {
             strRoles.forEach(
                     role -> {
                         switch (role) {
-                            case "admin":
+                            case "Admin":
                                 Role adminRole =
                                         roleRepository
                                                 .findByName(ERole.Admin)
@@ -115,7 +115,7 @@ public class AuthController {
                                                                         "Error: Role is not found."));
                                 roles.add(adminRole);
                                 break;
-                            case "report":
+                            case "Report":
                                 Role reportRole =
                                         roleRepository
                                                 .findByName(ERole.Report)

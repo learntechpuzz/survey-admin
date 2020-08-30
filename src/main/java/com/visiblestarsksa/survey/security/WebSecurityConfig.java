@@ -2,7 +2,7 @@ package com.visiblestarsksa.survey.security;
 
 import com.visiblestarsksa.survey.security.jwt.AuthEntryPointJwt;
 import com.visiblestarsksa.survey.security.jwt.AuthTokenFilter;
-import com.visiblestarsksa.survey.security.services.UserDetailsServiceImpl;
+import com.visiblestarsksa.survey.security.service.UserDetailsServiceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
