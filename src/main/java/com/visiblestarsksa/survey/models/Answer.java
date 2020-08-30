@@ -1,33 +1,39 @@
 package com.visiblestarsksa.survey.models;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.Embeddable;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
-@Entity
-@Table(name = "roles")
+@Embeddable
+@Table(name = "survey_answers")
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Role {
+public class Answer {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
-    @Enumerated(EnumType.STRING)
-    @Column(length = 20)
-    private ERole name;
+    @NotBlank
+    @Size(max = 255)
+    private String answer_en;
+
+    @NotBlank
+    @Size(max = 255)
+    private String answer_ar;
 }

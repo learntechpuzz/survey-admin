@@ -9,55 +9,46 @@ import lombok.ToString;
 
 import java.util.Set;
 
+import javax.persistence.CollectionTable;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(
-        name = "users",
-        uniqueConstraints = {
-            @UniqueConstraint(columnNames = "username"),
-            @UniqueConstraint(columnNames = "email")
-        })
+@Table(name = "surveys")
 @Builder
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class User {
+public class Survey {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank
-    @Size(max = 20)
-    private String username;
+    @Size(max = 50)
+    private String title_en;
 
     @NotBlank
     @Size(max = 50)
-    @Email
-    private String email;
+    private String title_ar;
 
-    @NotBlank
-    @Size(max = 120)
-    private String password;
+    @Enumerated(EnumType.STRING)
+    private ECategory category;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles;
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "survey_questions", joinColumns = @JoinColumn(name = "survey_id"))
+    private Set<Question> questions;
 }

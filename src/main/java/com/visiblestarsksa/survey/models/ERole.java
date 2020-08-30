@@ -1,7 +1,7 @@
 package com.visiblestarsksa.survey.models;
 
 public enum ERole {
-	User,
+    User,
     Report,
     Admin
 }
