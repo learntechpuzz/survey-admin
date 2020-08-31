@@ -1,5 +1,6 @@
 package com.visiblestarsksa.survey.service;
 
+import com.visiblestarsksa.survey.helpers.EnumUtil;
 import com.visiblestarsksa.survey.helpers.SurveyCSVHelper;
 import com.visiblestarsksa.survey.models.ECategory;
 import com.visiblestarsksa.survey.models.Survey;
@@ -23,7 +24,7 @@ public class SurveyCSVService {
                     Survey.builder()
                             .title_en(title_en)
                             .title_ar(title_ar)
-                            .category(Enum.valueOf(ECategory.class, category))
+                            .category(EnumUtil.value(ECategory.class, category, ECategory.RETAIL))
                             .questions(SurveyCSVHelper.csvToSurvey(file.getInputStream()))
                             .build());
         } catch (IOException e) {
@@ -39,7 +40,7 @@ public class SurveyCSVService {
                             .id(survey.getId())
                             .title_en(title_en)
                             .title_ar(title_ar)
-                            .category(Enum.valueOf(ECategory.class, category))
+                            .category(EnumUtil.value(ECategory.class, category, ECategory.RETAIL))
                             .questions(SurveyCSVHelper.csvToSurvey(file.getInputStream()))
                             .build());
         } catch (IOException e) {

@@ -1,5 +1,6 @@
 package com.visiblestarsksa.survey.controllers;
 
+import com.visiblestarsksa.survey.helpers.EnumUtil;
 import com.visiblestarsksa.survey.models.ERole;
 import com.visiblestarsksa.survey.models.Role;
 import com.visiblestarsksa.survey.models.User;
@@ -101,7 +102,10 @@ public class AuthController {
             strRoles.forEach(
                     role -> {
                         try {
-                            roles.add(Role.builder().name(Enum.valueOf(ERole.class, role)).build());
+                            roles.add(
+                                    Role.builder()
+                                            .name(EnumUtil.value(ERole.class, role, ERole.User))
+                                            .build());
                         } catch (Exception e) {
                             throw new RuntimeException("Error: Role is not found.");
                         }

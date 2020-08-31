@@ -46,11 +46,22 @@ public class SurveyCSVHelper {
     }
 
     public static Integer getIntegerRecord(CSVRecord csvRecord, String name) {
-        return csvRecord.isMapped(name) ? Integer.valueOf(csvRecord.get(name)) : 0;
+        try {
+            return csvRecord.isMapped(name) ? Integer.valueOf(csvRecord.get(name)) : -1;
+        } catch (NumberFormatException e) {
+            return -1;
+        }
     }
 
     public static Boolean getBooleanRecord(CSVRecord csvRecord, String name) {
         return csvRecord.isMapped(name) ? Boolean.valueOf(csvRecord.get(name)) : false;
+    }
+
+    public static <E extends Enum<E>> E getEnumRecord(
+            CSVRecord csvRecord, Class<E> clz, String name, E defaultValue) {
+        return csvRecord.isMapped(name)
+                ? EnumUtil.value(clz, getRecord(csvRecord, name), defaultValue)
+                : defaultValue;
     }
 
     public static Set<Question> csvToSurvey(InputStream is) {
@@ -86,8 +97,11 @@ public class SurveyCSVHelper {
                                 .question_ar(getRecord(csvRecord, "question_ar"))
                                 .required(getBooleanRecord(csvRecord, "required"))
                                 .type(
-                                        Enum.valueOf(
-                                                EQuestionType.class, getRecord(csvRecord, "type")))
+                                        getEnumRecord(
+                                                csvRecord,
+                                                EQuestionType.class,
+                                                "type",
+                                                EQuestionType.LABEL))
                                 .answers(answers)
                                 .build());
             }
