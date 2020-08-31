@@ -18,14 +18,20 @@ import java.util.Optional;
 public class SurveyCSVService {
     @Autowired SurveyRepository repository;
 
-    public void save(MultipartFile file, String title_en, String title_ar, String category) {
+    public void save(
+            MultipartFile questions,
+            MultipartFile users,
+            String title_en,
+            String title_ar,
+            String category) {
         try {
             repository.save(
                     Survey.builder()
                             .title_en(title_en)
                             .title_ar(title_ar)
                             .category(EnumUtil.value(ECategory.class, category, ECategory.RETAIL))
-                            .questions(SurveyCSVHelper.csvToSurvey(file.getInputStream()))
+                            .questions(SurveyCSVHelper.csvToQuestions(questions.getInputStream()))
+                            .users(SurveyCSVHelper.csvToSurveyUsers(users.getInputStream()))
                             .build());
         } catch (IOException e) {
             throw new RuntimeException("fail to store csv data: " + e.getMessage());
@@ -33,7 +39,12 @@ public class SurveyCSVService {
     }
 
     public void update(
-            Survey survey, MultipartFile file, String title_en, String title_ar, String category) {
+            Survey survey,
+            MultipartFile questions,
+            MultipartFile users,
+            String title_en,
+            String title_ar,
+            String category) {
         try {
             repository.save(
                     Survey.builder()
@@ -41,7 +52,8 @@ public class SurveyCSVService {
                             .title_en(title_en)
                             .title_ar(title_ar)
                             .category(EnumUtil.value(ECategory.class, category, ECategory.RETAIL))
-                            .questions(SurveyCSVHelper.csvToSurvey(file.getInputStream()))
+                            .questions(SurveyCSVHelper.csvToQuestions(questions.getInputStream()))
+                            .users(SurveyCSVHelper.csvToSurveyUsers(users.getInputStream()))
                             .build());
         } catch (IOException e) {
             throw new RuntimeException("fail to store csv data: " + e.getMessage());

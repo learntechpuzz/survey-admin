@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 @CrossOrigin("*")
@@ -34,18 +35,28 @@ public class SurveyCSVController {
 
     @PostMapping("/survey")
     public ResponseEntity<MessageResponse> uploadFile(
-            @RequestParam("file") MultipartFile file,
+            @RequestParam("questions") MultipartFile questions,
+            @RequestParam("users") MultipartFile users,
             @RequestParam("title_en") String title_en,
             @RequestParam("title_ar") String title_ar,
             @RequestParam("category") String category) {
         String message = "";
-        if (SurveyCSVHelper.hasCSVFormat(file)) {
+        if (SurveyCSVHelper.hasCSVFormat(questions) && SurveyCSVHelper.hasCSVFormat(users)) {
             try {
-                surveyCSVService.save(file, title_en, title_ar, category);
-                message = "Uploaded the file successfully: " + file.getOriginalFilename();
+                surveyCSVService.save(questions, users, title_en, title_ar, category);
+                message =
+                        "Uploaded the files successfully: "
+                                + Arrays.asList(
+                                        questions.getOriginalFilename(),
+                                        users.getOriginalFilename());
                 return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse(message));
             } catch (Exception e) {
-                message = "Could not upload the file: " + file.getOriginalFilename() + "!";
+                message =
+                        "Could not upload the files: "
+                                + Arrays.asList(
+                                        questions.getOriginalFilename(),
+                                        users.getOriginalFilename())
+                                + "!";
                 return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED)
                         .body(new MessageResponse(message));
             }
@@ -70,7 +81,8 @@ public class SurveyCSVController {
     @PutMapping("/survey/{id}")
     public ResponseEntity<MessageResponse> updateSurvey(
             @PathVariable("id") long id,
-            @RequestParam("file") MultipartFile file,
+            @RequestParam("questions") MultipartFile questions,
+            @RequestParam("users") MultipartFile users,
             @RequestParam("title_en") String title_en,
             @RequestParam("title_ar") String title_ar,
             @RequestParam("category") String category) {
@@ -78,13 +90,23 @@ public class SurveyCSVController {
         Optional<Survey> surveyData = surveyCSVService.getSurvey(id);
         if (surveyData.isPresent()) {
             String message = "";
-            if (SurveyCSVHelper.hasCSVFormat(file)) {
+            if (SurveyCSVHelper.hasCSVFormat(questions) && SurveyCSVHelper.hasCSVFormat(users)) {
                 try {
-                    surveyCSVService.update(surveyData.get(), file, title_en, title_ar, category);
-                    message = "Uploaded the file successfully: " + file.getOriginalFilename();
+                    surveyCSVService.update(
+                            surveyData.get(), questions, users, title_en, title_ar, category);
+                    message =
+                            "Uploaded the files successfully: "
+                                    + Arrays.asList(
+                                            questions.getOriginalFilename(),
+                                            users.getOriginalFilename());
                     return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse(message));
                 } catch (Exception e) {
-                    message = "Could not upload the file: " + file.getOriginalFilename() + "!";
+                    message =
+                            "Could not upload the files: "
+                                    + Arrays.asList(
+                                            questions.getOriginalFilename(),
+                                            users.getOriginalFilename())
+                                    + "!";
                     return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED)
                             .body(new MessageResponse(message));
                 }
