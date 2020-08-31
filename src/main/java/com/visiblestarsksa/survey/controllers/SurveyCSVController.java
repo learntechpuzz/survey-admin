@@ -101,7 +101,7 @@ public class SurveyCSVController {
     public ResponseEntity<HttpStatus> deleteSurvey(@PathVariable("id") long id) {
         try {
             surveyCSVService.deleteSurvey(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
