@@ -14,9 +14,6 @@ delete from survey_answers;
 delete from survey_questions;
 delete from surveys;
 
-
-
-
 select * from users;
 select * from user_roles;
 
