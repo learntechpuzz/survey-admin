@@ -42,7 +42,7 @@ public class SurveyUser {
 
     private String branch_code;
 
-    private String mask_party;
+    private Long mask_party;
 
     private String served_by;
 
@@ -54,10 +54,7 @@ public class SurveyUser {
 
     private Timestamp survey_expiry;
 
-    @Enumerated(EnumType.STRING)
-    private EUserType type;
-
-    private String link;
+    private String survey_url;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "survey_user_id")
