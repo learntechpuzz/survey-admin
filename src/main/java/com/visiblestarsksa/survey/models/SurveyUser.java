@@ -7,7 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.HashSet;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -19,43 +20,46 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 
 @Entity
-@Table(name = "surveys")
+@Table(name = "survey_users")
 @Builder
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Survey {
+public class SurveyUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    @Size(max = 50)
-    private String title_en;
+    private Long survey_id;
 
-    @NotBlank
-    @Size(max = 50)
-    private String title_ar;
+    private Date extraction_date;
+
+    private String branch_code;
+
+    private String mask_party;
+
+    private String served_by;
+
+    private String trans_desc;
+
+    private String segment;
+
+    private String gender;
+
+    private Timestamp survey_expiry;
 
     @Enumerated(EnumType.STRING)
-    private ECategory category;
+    private EUserType type;
+
+    private String link;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "survey_id")
-    @OrderBy(value = "step_no ASC")
-    private Set<Question> questions;
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "survey_id")
-    @Builder.Default
-    private Set<SurveyUser> users = new HashSet<>();
+    @JoinColumn(name = "survey_user_id")
+    private Set<UserResponse> responses;
 }

@@ -3,6 +3,8 @@ drop table users;
 
 drop table survey_answers;
 drop table survey_questions;
+drop table survey_users;
+
 drop table surveys;
 
 delete from user_roles;
