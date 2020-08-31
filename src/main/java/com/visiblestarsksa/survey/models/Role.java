@@ -1,6 +1,7 @@
 package com.visiblestarsksa.survey.models;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,7 +17,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "roles")
+@Table(name = "user_roles")
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor

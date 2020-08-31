@@ -96,44 +96,14 @@ public class AuthController {
         Set<Role> roles = new HashSet<>();
 
         if (strRoles == null) {
-            Role userRole =
-                    roleRepository
-                            .findByName(ERole.User)
-                            .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(userRole);
+            roles.add(Role.builder().name(ERole.User).build());
         } else {
             strRoles.forEach(
                     role -> {
-                        switch (role) {
-                            case "Admin":
-                                Role adminRole =
-                                        roleRepository
-                                                .findByName(ERole.Admin)
-                                                .orElseThrow(
-                                                        () ->
-                                                                new RuntimeException(
-                                                                        "Error: Role is not found."));
-                                roles.add(adminRole);
-                                break;
-                            case "Report":
-                                Role reportRole =
-                                        roleRepository
-                                                .findByName(ERole.Report)
-                                                .orElseThrow(
-                                                        () ->
-                                                                new RuntimeException(
-                                                                        "Error: Role is not found."));
-                                roles.add(reportRole);
-                                break;
-                            default:
-                                Role userRole =
-                                        roleRepository
-                                                .findByName(ERole.User)
-                                                .orElseThrow(
-                                                        () ->
-                                                                new RuntimeException(
-                                                                        "Error: Role is not found."));
-                                roles.add(userRole);
+                        try {
+                            roles.add(Role.builder().name(Enum.valueOf(ERole.class, role)).build());
+                        } catch (Exception e) {
+                            throw new RuntimeException("Error: Role is not found.");
                         }
                     });
         }

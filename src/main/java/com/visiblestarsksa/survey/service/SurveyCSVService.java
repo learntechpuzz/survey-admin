@@ -31,6 +31,22 @@ public class SurveyCSVService {
         }
     }
 
+    public void update(
+            Survey survey, MultipartFile file, String title_en, String title_ar, String category) {
+        try {
+            repository.save(
+                    Survey.builder()
+                            .id(survey.getId())
+                            .title_en(title_en)
+                            .title_ar(title_ar)
+                            .category(Enum.valueOf(ECategory.class, category))
+                            .questions(SurveyCSVHelper.csvToSurvey(file.getInputStream()))
+                            .build());
+        } catch (IOException e) {
+            throw new RuntimeException("fail to store csv data: " + e.getMessage());
+        }
+    }
+
     public ByteArrayInputStream load(Long id) {
         Optional<Survey> survey = repository.findById(id);
         ByteArrayInputStream in = SurveyCSVHelper.surveyToCSV(survey.get());
@@ -39,5 +55,9 @@ public class SurveyCSVService {
 
     public Optional<Survey> getSurvey(Long id) {
         return repository.findById(id);
+    }
+
+    public void deleteSurvey(Long id) {
+        repository.deleteById(id);
     }
 }

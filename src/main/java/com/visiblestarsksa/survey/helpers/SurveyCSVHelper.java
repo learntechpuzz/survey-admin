@@ -1,14 +1,9 @@
 package com.visiblestarsksa.survey.helpers;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
+import com.visiblestarsksa.survey.models.Answer;
+import com.visiblestarsksa.survey.models.EQuestionType;
+import com.visiblestarsksa.survey.models.Question;
+import com.visiblestarsksa.survey.models.Survey;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -18,10 +13,16 @@ import org.apache.commons.csv.QuoteMode;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.visiblestarsksa.survey.models.Answer;
-import com.visiblestarsksa.survey.models.EQuestionType;
-import com.visiblestarsksa.survey.models.Question;
-import com.visiblestarsksa.survey.models.Survey;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class SurveyCSVHelper {
     public static String TYPE = "text/csv";
@@ -52,7 +53,7 @@ public class SurveyCSVHelper {
         return csvRecord.isMapped(name) ? Boolean.valueOf(csvRecord.get(name)) : false;
     }
 
-    public static List<Question> csvToSurvey(InputStream is) {
+    public static Set<Question> csvToSurvey(InputStream is) {
         try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
                 CSVParser csvParser =
                         new CSVParser(
@@ -62,13 +63,13 @@ public class SurveyCSVHelper {
                                         .withIgnoreHeaderCase()
                                         .withTrim()); ) {
 
-            List<Question> questions = new ArrayList<>();
+            Set<Question> questions = new HashSet<>();
 
             Iterable<CSVRecord> csvRecords = csvParser.getRecords();
 
             for (CSVRecord csvRecord : csvRecords) {
 
-                List<Answer> answers = new ArrayList<>();
+                Set<Answer> answers = new HashSet<>();
                 int i = 1;
                 while (hasAnswerRecord(csvRecord, i)) {
                     answers.add(
