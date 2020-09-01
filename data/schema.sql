@@ -8,9 +8,6 @@ drop table survey_answers;
 drop table survey_questions;
 drop table surveys;
 
-delete from user_roles;
-delete from users;
-
 
 select * from surveys;
 select * from survey_questions;

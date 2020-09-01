@@ -1,5 +1,13 @@
 package com.visiblestarsksa.survey.helpers;
 
+import static com.visiblestarsksa.survey.util.CSVUtil.extractBoolean;
+import static com.visiblestarsksa.survey.util.CSVUtil.extractDate;
+import static com.visiblestarsksa.survey.util.CSVUtil.extractEnum;
+import static com.visiblestarsksa.survey.util.CSVUtil.extractInt;
+import static com.visiblestarsksa.survey.util.CSVUtil.extractLong;
+import static com.visiblestarsksa.survey.util.CSVUtil.extractString;
+
+import com.visiblestarsksa.survey.exception.FormatException;
 import com.visiblestarsksa.survey.models.Answer;
 import com.visiblestarsksa.survey.models.EQuestionType;
 import com.visiblestarsksa.survey.models.Question;
@@ -21,9 +29,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -38,53 +43,14 @@ public class SurveyCSVHelper {
         return true;
     }
 
-    public static boolean hasAnswerRecord(CSVRecord csvRecord, int i) {
-        return (!StringUtils.isEmpty(getStringRecord(csvRecord, "answer_en_" + i))
-                && !StringUtils.isEmpty(getStringRecord(csvRecord, "answer_ar_" + i)));
+    public static boolean hasAnswerRecord(CSVRecord record, int i) throws FormatException {
+        return (record.isMapped("answer_en_" + i)
+                && !StringUtils.isEmpty(extractString("answer_en_" + i, record))
+                && record.isMapped("answer_ar_" + i)
+                && !StringUtils.isEmpty(extractString("answer_ar_" + i, record)));
     }
 
-    public static String getStringRecord(CSVRecord csvRecord, String name) {
-        return csvRecord.isMapped(name) ? csvRecord.get(name) : "";
-    }
-
-    public static Integer getIntegerRecord(CSVRecord csvRecord, String name) {
-        try {
-            return csvRecord.isMapped(name) ? Integer.valueOf(csvRecord.get(name)) : -1;
-        } catch (NumberFormatException e) {
-            return -1;
-        }
-    }
-
-    public static Long getLongRecord(CSVRecord csvRecord, String name) {
-        try {
-            return csvRecord.isMapped(name) ? Long.valueOf(csvRecord.get(name)) : -1L;
-        } catch (NumberFormatException e) {
-            return -1L;
-        }
-    }
-
-    public static Boolean getBooleanRecord(CSVRecord csvRecord, String name) {
-        return csvRecord.isMapped(name) ? Boolean.valueOf(csvRecord.get(name)) : false;
-    }
-
-    public static <E extends Enum<E>> E getEnumRecord(
-            CSVRecord csvRecord, Class<E> clz, String name, E defaultValue) {
-        return csvRecord.isMapped(name)
-                ? EnumUtil.value(clz, csvRecord.get(name), defaultValue)
-                : defaultValue;
-    }
-
-    public static Date getDateRecord(CSVRecord csvRecord, String name) {
-        try {
-            return csvRecord.isMapped(name)
-                    ? new SimpleDateFormat("YYYY-mm-dd").parse(csvRecord.get(name))
-                    : new Date();
-        } catch (ParseException e) {
-            return new Date();
-        }
-    }
-
-    public static Set<Question> csvToQuestions(InputStream is) {
+    public static Set<Question> csvToQuestions(InputStream is) throws IOException, FormatException {
         try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
                 CSVParser csvParser =
                         new CSVParser(
@@ -104,33 +70,27 @@ public class SurveyCSVHelper {
                 while (hasAnswerRecord(csvRecord, i)) {
                     answers.add(
                             Answer.builder()
-                                    .answer_en(getStringRecord(csvRecord, "answer_en_" + i))
-                                    .answer_ar(getStringRecord(csvRecord, "answer_ar_" + i))
+                                    .answer_en(extractString("answer_en_" + i, csvRecord))
+                                    .answer_ar(extractString("answer_ar_" + i, csvRecord))
                                     .build());
                     i++;
                 }
                 questions.add(
                         Question.builder()
-                                .step_no(getIntegerRecord(csvRecord, "step_no"))
-                                .question_en(getStringRecord(csvRecord, "question_en"))
-                                .question_ar(getStringRecord(csvRecord, "question_ar"))
-                                .required(getBooleanRecord(csvRecord, "required"))
-                                .type(
-                                        getEnumRecord(
-                                                csvRecord,
-                                                EQuestionType.class,
-                                                "type",
-                                                EQuestionType.LABEL))
+                                .step_no(extractInt("step_no", csvRecord))
+                                .question_en(extractString("question_en", csvRecord))
+                                .question_ar(extractString("question_ar", csvRecord))
+                                .required(extractBoolean("required", csvRecord))
+                                .type(extractEnum("type", csvRecord, EQuestionType.class, null))
                                 .answers(answers)
                                 .build());
             }
             return questions;
-        } catch (IOException e) {
-            throw new RuntimeException("fail to parse CSV file: " + e.getMessage());
         }
     }
 
-    public static Set<SurveyUser> csvToSurveyUsers(InputStream is) {
+    public static Set<SurveyUser> csvToSurveyUsers(InputStream is)
+            throws IOException, FormatException {
         try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
                 CSVParser csvParser =
                         new CSVParser(
@@ -148,19 +108,18 @@ public class SurveyCSVHelper {
 
                 surveyUsers.add(
                         SurveyUser.builder()
-                                .extraction_date(getDateRecord(csvRecord, "extraction_date"))
-                                .branch_code(getLongRecord(csvRecord, "branch_code"))
-                                .mask_party(getLongRecord(csvRecord, "mask_party"))
-                                .served_by(getStringRecord(csvRecord, "served_by"))
-                                .trans_desc(getStringRecord(csvRecord, "trans_desc"))
-                                .segment(getStringRecord(csvRecord, "segment"))
-                                .gender(getStringRecord(csvRecord, "gender"))
+                                .extraction_date(
+                                        extractDate("extraction_date", csvRecord, "YYYY-MM-dd"))
+                                .branch_code(extractLong("branch_code", csvRecord))
+                                .mask_party(extractLong("mask_party", csvRecord))
+                                .served_by(extractString("served_by", csvRecord))
+                                .trans_desc(extractString("trans_desc", csvRecord))
+                                .segment(extractString("segment", csvRecord))
+                                .gender(extractString("gender", csvRecord))
                                 .build());
             }
 
             return surveyUsers;
-        } catch (IOException e) {
-            throw new RuntimeException("fail to parse CSV file: " + e.getMessage());
         }
     }
 

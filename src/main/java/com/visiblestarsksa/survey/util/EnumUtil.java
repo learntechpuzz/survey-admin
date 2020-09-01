@@ -1,4 +1,4 @@
-package com.visiblestarsksa.survey.helpers;
+package com.visiblestarsksa.survey.util;
 
 public class EnumUtil {
 
@@ -6,7 +6,8 @@ public class EnumUtil {
         try {
             return Enum.valueOf(clz, name);
         } catch (IllegalArgumentException | NullPointerException e) {
-            return defaultValue;
+            if (defaultValue == null) throw e;
+            else return defaultValue;
         }
     }
 }

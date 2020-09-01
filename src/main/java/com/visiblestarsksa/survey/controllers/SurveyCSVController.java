@@ -51,13 +51,8 @@ public class SurveyCSVController {
                                         users.getOriginalFilename());
                 return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse(message));
             } catch (Exception e) {
-                message =
-                        "Could not upload the files: "
-                                + Arrays.asList(
-                                        questions.getOriginalFilename(),
-                                        users.getOriginalFilename())
-                                + "!";
-                return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED)
+                message = "Could not upload the files: " + e.getMessage();
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                         .body(new MessageResponse(message));
             }
         }

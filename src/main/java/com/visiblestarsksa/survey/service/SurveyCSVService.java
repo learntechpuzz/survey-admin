@@ -1,10 +1,11 @@
 package com.visiblestarsksa.survey.service;
 
-import com.visiblestarsksa.survey.helpers.EnumUtil;
+import com.visiblestarsksa.survey.exception.FormatException;
 import com.visiblestarsksa.survey.helpers.SurveyCSVHelper;
 import com.visiblestarsksa.survey.models.ECategory;
 import com.visiblestarsksa.survey.models.Survey;
 import com.visiblestarsksa.survey.repository.SurveyRepository;
+import com.visiblestarsksa.survey.util.EnumUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,7 @@ public class SurveyCSVService {
                             .questions(SurveyCSVHelper.csvToQuestions(questions.getInputStream()))
                             .users(SurveyCSVHelper.csvToSurveyUsers(users.getInputStream()))
                             .build());
-        } catch (IOException e) {
+        } catch (IOException | FormatException e) {
             throw new RuntimeException("fail to store csv data: " + e.getMessage());
         }
     }
@@ -51,11 +52,11 @@ public class SurveyCSVService {
                             .id(survey.getId())
                             .title_en(title_en)
                             .title_ar(title_ar)
-                            .category(EnumUtil.value(ECategory.class, category, ECategory.RETAIL))
+                            .category(EnumUtil.value(ECategory.class, category, null))
                             .questions(SurveyCSVHelper.csvToQuestions(questions.getInputStream()))
                             .users(SurveyCSVHelper.csvToSurveyUsers(users.getInputStream()))
                             .build());
-        } catch (IOException e) {
+        } catch (IOException | FormatException e) {
             throw new RuntimeException("fail to store csv data: " + e.getMessage());
         }
     }

@@ -1,6 +1,5 @@
 package com.visiblestarsksa.survey.controllers;
 
-import com.visiblestarsksa.survey.helpers.EnumUtil;
 import com.visiblestarsksa.survey.models.ERole;
 import com.visiblestarsksa.survey.models.Role;
 import com.visiblestarsksa.survey.models.User;
@@ -12,6 +11,7 @@ import com.visiblestarsksa.survey.repository.RoleRepository;
 import com.visiblestarsksa.survey.repository.UserRepository;
 import com.visiblestarsksa.survey.security.jwt.JwtUtils;
 import com.visiblestarsksa.survey.security.service.UserDetailsImpl;
+import com.visiblestarsksa.survey.util.EnumUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
