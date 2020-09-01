@@ -109,7 +109,7 @@ public class SurveyCSVHelper {
                 surveyUsers.add(
                         SurveyUser.builder()
                                 .extraction_date(
-                                        extractDate("extraction_date", csvRecord, "YYYY-MM-dd"))
+                                        extractDate("extraction_date", csvRecord, "yyyy-MM-dd"))
                                 .branch_code(extractLong("branch_code", csvRecord))
                                 .mask_party(extractLong("mask_party", csvRecord))
                                 .served_by(extractString("served_by", csvRecord))
