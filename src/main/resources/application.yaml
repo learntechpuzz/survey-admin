@@ -1,0 +1,35 @@
+spring:
+  datasource:
+    password: admin123
+    url: jdbc:postgresql://localhost:5432/survey
+    username: admin
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          lob:
+            non_contextual_creation: true
+  servlet:
+    multipart:
+      max-file-size: 2MB
+      max-request-size: 2MB
+
+logging:
+  file:
+    name: application.log
+  pattern:
+    file: "%d %p %c{1.} [%t] %m%n"
+  level: 
+    org.springframework: ERROR
+    com.visiblestarsksa: DEBUG
+
+survey:
+  app:
+    jwtExpirationMs: 3600000
+    jwtSecret: secret
+  template:
+    url: http://learntechpuzz.com/survey
+    

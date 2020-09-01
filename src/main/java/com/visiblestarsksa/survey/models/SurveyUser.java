@@ -1,11 +1,16 @@
 package com.visiblestarsksa.survey.models;
 
+import static com.visiblestarsksa.survey.util.SurveyConfig.*;
+
+import com.visiblestarsksa.survey.util.CryptoUtil;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -18,8 +23,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.PostPersist;
 import javax.persistence.Table;
 
+@Slf4j
 @Entity
 @Table(name = "survey_users")
 @Builder
@@ -57,4 +64,10 @@ public class SurveyUser {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "survey_user_id")
     private Set<UserResponse> responses;
+
+    @PostPersist
+    public void generateSurveyData() {
+        this.survey_url = SURVEY_URL_PREFIX + "?st=" + CryptoUtil.encrypt(String.valueOf(id));
+        log.debug("survey_url: {}", survey_url);
+    }
 }
